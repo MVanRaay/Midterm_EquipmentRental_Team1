@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.21" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\Midterm_EquipmentRental_Team1_Models\Midterm_EquipmentRental_Team1_Models.csproj" />
   </ItemGroup>
 
 </Project>

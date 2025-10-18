@@ -1,6 +1,0 @@
-@Midterm_EquipmentRental_Team1_API_HostAddress = http://localhost:5253
-
-GET {{Midterm_EquipmentRental_Team1_API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
