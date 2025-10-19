@@ -1,5 +1,6 @@
 ﻿using Midterm_EquipmentRental_Team1_API.Data;
 using Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
+using Midterm_EquipmentRental_Team1_Models;
 
 namespace Midterm_EquipmentRental_Team1_API.Repositories;
 
@@ -7,11 +8,11 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    public IEquipmentRepository Equipment { get; set; }
-    public ICustomerRepository Customers { get; set; }
-    public IRentalRepository Rentals { get; set; }
+    public ICrudRepository<Equipment> Equipment { get; set; }
+    public ICrudRepository<Customer> Customers { get; set; }
+    public ICrudRepository<Rental> Rentals { get; set; }
 
-    public UnitOfWork(IEquipmentRepository equipmentRepository, ICustomerRepository customerRepository, IRentalRepository rentalRepository, AppDbContext context)
+    public UnitOfWork(ICrudRepository<Equipment> equipmentRepository, ICrudRepository<Customer> customerRepository, ICrudRepository<Rental> rentalRepository, AppDbContext context)
     {
         Equipment = equipmentRepository;
         Customers = customerRepository;

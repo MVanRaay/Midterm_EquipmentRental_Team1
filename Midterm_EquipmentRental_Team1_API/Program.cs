@@ -4,15 +4,16 @@ using Midterm_EquipmentRental_Team1_API.Repositories;
 using Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
 using Midterm_EquipmentRental_Team1_API.Services;
 using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
+using Midterm_EquipmentRental_Team1_Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("EquipmentRentalDb"));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("equipment_rental_db"));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+builder.Services.AddScoped<ICrudRepository<Equipment>, EquipmentRepository>();
+builder.Services.AddScoped<ICrudRepository<Customer>, CustomerRepository>();
+builder.Services.AddScoped<ICrudRepository<Rental>, RentalRepository>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IRentalService, RentalService>();

@@ -4,7 +4,7 @@ using Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
 
 namespace Midterm_EquipmentRental_Team1_API.Repositories;
 
-public class CustomerRepository : ICustomerRepository
+public class CustomerRepository : ICrudRepository<Customer>
 {
     private readonly AppDbContext _context;
 

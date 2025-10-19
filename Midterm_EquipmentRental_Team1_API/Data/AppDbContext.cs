@@ -20,7 +20,7 @@ public class AppDbContext : DbContext
                 Name = "Laser Level",
                 Description = "For when you absolutely need something to be level.",
                 RentalPrice = 55.95m,
-                IsAvailable = true,
+                IsAvailable = false,
                 Category = EquipmentCategory.Surveying,
                 Condition = EquipmentCondition.Good,
                 CreatedAt = DateTime.Now
@@ -31,7 +31,7 @@ public class AppDbContext : DbContext
                 Name = "Mini Excavator",
                 Description = "1-Ton Kubota K008-3 Mini Excavator is small and maneuverable enough to fit anywhere, and capable enough to help you accomplish your backyard landscaping dreams.",
                 RentalPrice = 299.99m,
-                IsAvailable = false,
+                IsAvailable = true,
                 Category = EquipmentCategory.HeavyMachinery,
                 Condition = EquipmentCondition.Fair,
                 CreatedAt = DateTime.Now
@@ -42,7 +42,7 @@ public class AppDbContext : DbContext
                 Name = "Wood Chipper / Trailer Combo",
                 Description = "An effective and mobile solution for removing trees, without the mess. Comes With the wood chipper fixed to a collection trailer, which attaches to a standard trailer hitch.",
                 RentalPrice = 139.99m,
-                IsAvailable = true,
+                IsAvailable = false,
                 Category = EquipmentCategory.Vehicles,
                 Condition = EquipmentCondition.Excellent,
                 CreatedAt = DateTime.Now
@@ -90,7 +90,7 @@ public class AppDbContext : DbContext
                 Username = "GotthardHayes",
                 Password = "Gotthard",
                 Role = "User",
-                HasActiveRental = false
+                HasActiveRental = true
             },
             new Customer
             {
@@ -120,7 +120,7 @@ public class AppDbContext : DbContext
                 Username = "NuraEdson",
                 Password = "Nura",
                 Role = "User",
-                HasActiveRental = false
+                HasActiveRental = true
             },
             new Customer
             {
@@ -130,11 +130,68 @@ public class AppDbContext : DbContext
                 Username = "VivianeXun",
                 Password = "Viviane",
                 Role = "User",
-                HasActiveRental = false
+                HasActiveRental = true
             }
         );
 
         modelBuilder.Entity<Rental>().HasData(
+            new Rental
+            {
+                Id = 1,
+                EquipmentId = 1,
+                CustomerId = 2,
+                Status = true,
+                IssuedAt = DateTime.Now,
+                DueDate = DateTime.Now.Date.AddDays(3).AddHours(23).AddMinutes(59).AddSeconds(59)
+            },
+            new Rental
+            {
+                Id = 2,
+                EquipmentId = 4,
+                CustomerId = 3,
+                Status = false,
+                IssuedAt = DateTime.Parse("2025/8/25 15:26:13"),
+                DueDate = DateTime.Parse("2025/8/28 23:59:59"),
+                ReturnedAt = DateTime.Parse("2025/8/30 17:48:09")
+            },
+            new Rental
+            {
+                Id = 3,
+                EquipmentId = 4,
+                CustomerId = 5,
+                Status = true,
+                IssuedAt = DateTime.Now,
+                DueDate = DateTime.Now.Date.AddDays(5).AddHours(23).AddMinutes(59).AddSeconds(59)
+            },
+            new Rental
+            {
+                Id = 4,
+                EquipmentId = 2,
+                CustomerId = 4,
+                Status = false,
+                IssuedAt = DateTime.Parse("2025/6/13 11:04:39"),
+                DueDate = DateTime.Parse("2025/6/16 23:59:59"),
+                ReturnedAt = DateTime.Parse("2025/6/16 18:14:52")
+            },
+            new Rental
+            {
+                Id = 5,
+                EquipmentId = 1,
+                CustomerId = 4,
+                Status = false,
+                IssuedAt = DateTime.Parse("2025/6/16 18:18:51"),
+                DueDate = DateTime.Parse("2025/6/19 23:59:59"),
+                ReturnedAt = DateTime.Parse("2025/6/18 14:19:12")
+            },
+            new Rental
+            {
+                Id = 6,
+                EquipmentId = 3,
+                CustomerId = 6,
+                Status = true,
+                IssuedAt = DateTime.Parse("2025/10/14 10:35:18"),
+                DueDate = DateTime.Parse("2025/10/17 23:59:59"),
+            }
         );
     }
 }

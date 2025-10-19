@@ -13,17 +13,17 @@ public class EquipmentService : IEquipmentService
         _unitOfWork = unitOfWork;
     }
 
-    public IEnumerable<Equipment> GetAllEquipment()
+    public IEnumerable<Equipment> GetAll()
     {
         return _unitOfWork.Equipment.GetAll();
     }
 
-    public Equipment? GetEquipmentById(int id)
+    public Equipment? GetById(int id)
     {
         return _unitOfWork.Equipment.GetById(id);
     }
 
-    public bool CreateEquipment(Equipment equipment)
+    public bool Create(Equipment equipment)
     {
         equipment.CreatedAt = DateTime.Now;
         equipment.Condition = EquipmentCondition.New;
@@ -33,7 +33,7 @@ public class EquipmentService : IEquipmentService
         return result > 0;
     }
 
-    public bool UpdateEquipment(int id, Equipment equipment)
+    public bool Update(int id, Equipment equipment)
     {
         equipment.Id = id;
         _unitOfWork.Equipment.Update(equipment);
@@ -41,10 +41,10 @@ public class EquipmentService : IEquipmentService
         return result > 0;
     }
 
-    public bool DeleteEquipment(int id)
+    public bool Delete(int id)
     {
         Equipment equipment = _unitOfWork.Equipment.GetById(id)!;
-        if (equipment == null) return false;
+        if (equipment == null || _unitOfWork.Rentals.GetAll().Where(r => r.EquipmentId == equipment.Id && r.Status).Any()) return false;
         _unitOfWork.Equipment.Delete(equipment);
         int result = _unitOfWork.Complete();
         return result > 0;

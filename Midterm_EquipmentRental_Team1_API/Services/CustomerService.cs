@@ -13,24 +13,24 @@ public class CustomerService : ICustomerService
         _unitOfWork = unitOfWork;
     }
 
-    public IEnumerable<Customer> GetAllCustomers()
+    public IEnumerable<Customer> GetAll()
     {
         return _unitOfWork.Customers.GetAll();
     }
 
-    public Customer? GetCustomerById(int id)
+    public Customer? GetById(int id)
     {
         return _unitOfWork.Customers.GetById(id);
     }
 
-    public bool CreateCustomer(Customer customer)
+    public bool Create(Customer customer)
     {
         _unitOfWork.Customers.Add(customer);
         int result = _unitOfWork.Complete();
         return result > 0;
     }
 
-    public bool UpdateCustomer(int id, Customer customer)
+    public bool Update(int id, Customer customer)
     {
         customer.Id = id;
         _unitOfWork.Customers.Update(customer);
@@ -38,10 +38,10 @@ public class CustomerService : ICustomerService
         return result > 0;
     }
 
-    public bool DeleteCustomer(int id)
+    public bool Delete(int id)
     {
         Customer customer = _unitOfWork.Customers.GetById(id)!;
-        if (customer == null) return false;
+        if (customer == null || _unitOfWork.Rentals.GetAll().Where(r => r.CustomerId == customer.Id && r.Status).Any()) return false;
         _unitOfWork.Customers.Delete(customer);
         int result = _unitOfWork.Complete();
         return result > 0;

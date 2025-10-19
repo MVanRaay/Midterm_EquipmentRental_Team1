@@ -18,36 +18,36 @@ public class EquipmentController : ControllerBase
     [HttpGet]
     public ActionResult GetAll()
     {
-        IEnumerable<Equipment> equipment = _service.GetAllEquipment();
+        IEnumerable<Equipment> equipment = _service.GetAll();
         return equipment.ToList().Count > 0 ? Ok(equipment) : NotFound();
     }
 
     [HttpGet("{id}")]
     public ActionResult Get(int id)
     {
-        Equipment equipment = _service.GetEquipmentById(id)!;
+        Equipment equipment = _service.GetById(id)!;
         return equipment != null ? Ok(equipment) : NotFound();
     }
 
     [HttpPost]
     public ActionResult Add([FromBody] Equipment equipment)
     {
-        bool success = _service.CreateEquipment(equipment);
+        bool success = _service.Create(equipment);
         return success ? CreatedAtAction("Get", equipment.Id) : BadRequest();
     }
 
     [HttpPut("{id}")]
     public ActionResult Update(int id, [FromBody] Equipment equipment)
     {
-        bool success = _service.UpdateEquipment(id, equipment);
+        bool success = _service.Update(id, equipment);
         return success ? Get(id) : BadRequest();
     }
 
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        bool success = _service.DeleteEquipment(id);
-        return success ? Ok() : BadRequest();
+        bool success = _service.Delete(id);
+        return success ? Ok() : NotFound();
     }
 
     [HttpGet("available")]

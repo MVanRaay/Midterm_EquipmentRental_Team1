@@ -1,9 +1,11 @@
-﻿namespace Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
+﻿using Midterm_EquipmentRental_Team1_Models;
+
+namespace Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
 
 public interface IUnitOfWork
 {
-    IEquipmentRepository Equipment { get; }
-    ICustomerRepository Customers { get; }
-    IRentalRepository Rentals { get; }
+    ICrudRepository<Equipment> Equipment { get; }
+    ICrudRepository<Customer> Customers { get; }
+    ICrudRepository<Rental> Rentals { get; }
     int Complete();
 }
