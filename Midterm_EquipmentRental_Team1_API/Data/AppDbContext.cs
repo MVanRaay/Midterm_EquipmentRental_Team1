@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Rental> Rentals { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -193,5 +194,36 @@ public class AppDbContext : DbContext
                 DueDate = DateTime.Parse("2025/10/17 23:59:59"),
             }
         );
+
+        modelBuilder.Entity<User>().HasData(
+                new User 
+                { 
+                    Id = 1, 
+                    Username = "admin", 
+                    Password = "admin", 
+                    Role = "Admin" 
+                },
+                new User 
+                { 
+                    Id = 2, 
+                    Username = "customer", 
+                    Password = "customer", 
+                    Role = "User" 
+                },
+                new User
+                {
+                    Id = 3,
+                    Username = "user",
+                    Password = "user",
+                    Role = "User"
+                },
+                new User
+                {
+                    Id = 4,
+                    Username = "rentee",
+                    Password = "rentee",
+                    Role = "User"
+                }
+            );
     }
 }

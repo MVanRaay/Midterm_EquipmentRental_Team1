@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Midterm_EquipmentRental_Team1_Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
+using Midterm_EquipmentRental_Team1_Models;
 
 namespace Midterm_EquipmentRental_Team1_API.Controllers;
 
@@ -15,6 +16,7 @@ public class EquipmentController : ControllerBase
         _service = service;
     }
 
+    [Authorize]
     [HttpGet]
     public ActionResult GetAll()
     {
@@ -22,6 +24,7 @@ public class EquipmentController : ControllerBase
         return equipment.ToList().Count > 0 ? Ok(equipment) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public ActionResult Get(int id)
     {
@@ -29,6 +32,7 @@ public class EquipmentController : ControllerBase
         return equipment != null ? Ok(equipment) : NotFound();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public ActionResult Add([FromBody] Equipment equipment)
     {
@@ -36,6 +40,7 @@ public class EquipmentController : ControllerBase
         return success ? CreatedAtAction("Get", equipment.Id) : BadRequest();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public ActionResult Update(int id, [FromBody] Equipment equipment)
     {
@@ -43,6 +48,7 @@ public class EquipmentController : ControllerBase
         return success ? Get(id) : BadRequest();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
@@ -50,6 +56,7 @@ public class EquipmentController : ControllerBase
         return success ? Ok() : NotFound();
     }
 
+    [Authorize]
     [HttpGet("available")]
     public ActionResult GetAvailable()
     {
@@ -57,6 +64,7 @@ public class EquipmentController : ControllerBase
         return equipment.ToList().Count > 0 ? Ok(equipment) : NotFound();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("rented")]
     public ActionResult GetRented()
     {

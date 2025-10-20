@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
 using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
@@ -17,6 +18,7 @@ public class RentalController : ControllerBase
         _service = service;
     }
 
+    [Authorize]
     [HttpGet]
     public ActionResult GetAll()
     {
@@ -24,6 +26,7 @@ public class RentalController : ControllerBase
         return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public ActionResult Get(int id)
     {
@@ -31,6 +34,7 @@ public class RentalController : ControllerBase
         return rental != null ? Ok(rental) : NotFound();
     }
 
+    [Authorize]
     [HttpPost("issue")]
     public ActionResult Issue([FromBody] Rental rental)
     {
@@ -38,6 +42,7 @@ public class RentalController : ControllerBase
         return success ? Ok(rental) : NotFound();
     }
 
+    [Authorize]
     [HttpPost("return")]
     public ActionResult Return([FromBody] Rental rental)
     {
@@ -45,6 +50,7 @@ public class RentalController : ControllerBase
         return success ? Ok(rental) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("active")]
     public ActionResult GetActive()
     {
@@ -52,6 +58,7 @@ public class RentalController : ControllerBase
         return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("completed")]
     public ActionResult GetCompleted()
     {
@@ -59,6 +66,7 @@ public class RentalController : ControllerBase
         return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("overdue")]
     public ActionResult GetOverdue()
     {
@@ -66,6 +74,7 @@ public class RentalController : ControllerBase
         return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("equipment/{equipmentId}")]
     public ActionResult GetRentalHistory(int equipmentId)
     {
@@ -73,6 +82,7 @@ public class RentalController : ControllerBase
         return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public ActionResult ExtendRental(int id, [FromBody] Rental rental)
     {
@@ -81,6 +91,7 @@ public class RentalController : ControllerBase
         return success ? Ok(rental) : NotFound();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public ActionResult ForceCancel(int id)
     {

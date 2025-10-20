@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
 using Midterm_EquipmentRental_Team1_Models;
 
@@ -15,6 +16,7 @@ public class CustomerController : ControllerBase
         _service = service;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public ActionResult GetAll()
     {
@@ -22,6 +24,7 @@ public class CustomerController : ControllerBase
         return customers.ToList().Count > 0 ? Ok(customers) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public ActionResult Get(int id)
     {
@@ -29,6 +32,7 @@ public class CustomerController : ControllerBase
         return customer != null ? Ok(customer) : NotFound();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public ActionResult Add([FromBody] Customer customer)
     {
@@ -36,6 +40,7 @@ public class CustomerController : ControllerBase
         return success ? CreatedAtAction("Get", customer.Id) : BadRequest();
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public ActionResult Update(int id, [FromBody] Customer customer)
     {
@@ -43,6 +48,7 @@ public class CustomerController : ControllerBase
         return success ? Get(id) : BadRequest();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
@@ -50,6 +56,7 @@ public class CustomerController : ControllerBase
         return success ? Ok() : NotFound();
     }
 
+    [Authorize]
     [HttpGet("{id}/rentals")]
     public ActionResult GetCustomerRentalHistory(int id)
     {
@@ -57,6 +64,7 @@ public class CustomerController : ControllerBase
         return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
     }
 
+    [Authorize]
     [HttpGet("{id}/active-rental")]
     public ActionResult GetCustomerActiveRental(int id)
     {
