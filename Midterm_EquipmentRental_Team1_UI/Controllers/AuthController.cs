@@ -36,7 +36,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
                 Password = model.Password,
             };
 
-            var response = await client.PostAsJsonAsync("https://localhost:7212/api/auth/login", loginRequest);
+            var response = await client.PostAsJsonAsync("https://localhost:7191/api/auth/login", loginRequest);
 
             if (response.IsSuccessStatusCode)
             {
@@ -52,14 +52,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
 
                 var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
 
-                if (roleClaim == "Admin")
-                {
-                    return RedirectToAction("Index", "Equipment");
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Equipment");
-                }
+                return RedirectToAction("Index", "Equipment");
             }
             else
             {
