@@ -37,7 +37,7 @@ namespace Midterm_EquipmentRental_Team1_API.Controllers
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, customer.Username),
+                new Claim(ClaimTypes.Name, customer.Id.ToString()),
                 new Claim(ClaimTypes.Role, customer.Role)
             };
 

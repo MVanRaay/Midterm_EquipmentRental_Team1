@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
 using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
 using Midterm_EquipmentRental_Team1_Models;
+using System.Security.Claims;
 
 namespace Midterm_EquipmentRental_Team1_API.Controllers;
 
@@ -22,22 +23,59 @@ public class RentalController : ControllerBase
     [HttpGet]
     public ActionResult GetAll()
     {
-        IEnumerable<Rental> rentals = _service.GetAll();
-        return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
+        var userIdClaim = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+
+        int userId = int.Parse(userIdClaim);
+        IEnumerable<Rental> rentals;
+
+        if (roleClaim == "Admin")
+        {
+            rentals = _service.GetAll();
+        }
+        else
+        {
+            rentals = _service.GetAll().Where(r => r.CustomerId == userId);
+        }
+
+        return rentals.Any() ? Ok(rentals) : NotFound();
     }
 
     [Authorize]
     [HttpGet("{id}")]
     public ActionResult Get(int id)
     {
+        var userClaims = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaims = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userClaims)) return Unauthorized();
+
+        int userId = int.Parse(userClaims);
+
         Rental rental = _service.GetById(id)!;
-        return rental != null ? Ok(rental) : NotFound();
+
+        if (rental == null) return NotFound();
+
+        if (roleClaims != "Admin" && userId != rental.CustomerId) return Unauthorized();
+
+        return Ok(rental);
     }
 
     [Authorize]
     [HttpPost("issue")]
     public ActionResult Issue([FromBody] Rental rental)
     {
+        var userClaims = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaims = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userClaims)) return Unauthorized();
+
+        int userId = int.Parse(userClaims);
+
+        if (roleClaims != "Admin" && userId != rental.CustomerId) return Unauthorized();
+
         bool success = _service.Issue(rental);
         return success ? Ok(rental) : NotFound();
     }
@@ -46,6 +84,15 @@ public class RentalController : ControllerBase
     [HttpPost("return")]
     public ActionResult Return([FromBody] Rental rental)
     {
+        var userClaims = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaims = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userClaims)) return Unauthorized();
+
+        int userId = int.Parse(userClaims);
+
+        if (roleClaims != "Admin" && userId != rental.CustomerId) return Unauthorized();
+
         bool success = _service.Return(rental);
         return success ? Ok(rental) : NotFound();
     }
@@ -54,16 +101,48 @@ public class RentalController : ControllerBase
     [HttpGet("active")]
     public ActionResult GetActive()
     {
-        IEnumerable<Rental> rentals = _service.GetActiveRentals();
-        return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
+        var userIdClaim = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+
+        int userId = int.Parse(userIdClaim);
+        IEnumerable<Rental> rentals;
+
+        if (roleClaim == "Admin")
+        {
+            rentals = _service.GetActiveRentals();
+        }
+        else
+        {
+            rentals = _service.GetActiveRentals().Where(r => r.CustomerId == userId);
+        }
+
+        return rentals.Any() ? Ok(rentals) : NotFound();
     }
 
     [Authorize]
     [HttpGet("completed")]
     public ActionResult GetCompleted()
     {
-        IEnumerable<Rental> rentals = _service.GetCompletedRentals();
-        return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
+        var userIdClaim = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+
+        int userId = int.Parse(userIdClaim);
+        IEnumerable<Rental> rentals;
+
+        if (roleClaim == "Admin")
+        {
+            rentals = _service.GetActiveRentals();
+        }
+        else
+        {
+            rentals = _service.GetActiveRentals().Where(r => r.CustomerId == userId);
+        }
+
+        return rentals.Any() ? Ok(rentals) : NotFound();
     }
 
     [Authorize(Roles = "Admin")]
@@ -78,8 +157,24 @@ public class RentalController : ControllerBase
     [HttpGet("equipment/{equipmentId}")]
     public ActionResult GetRentalHistory(int equipmentId)
     {
-        IEnumerable<Rental> rentals = _service.GetRentalsForEquipment(equipmentId);
-        return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
+        var userIdClaim = User.FindFirst(ClaimTypes.Name)?.Value;
+        var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+
+        int userId = int.Parse(userIdClaim);
+        IEnumerable<Rental> rentals;
+
+        if (roleClaim == "Admin")
+        {
+            rentals = _service.GetRentalsForEquipment(equipmentId);
+        }
+        else
+        {
+            rentals = _service.GetRentalsForEquipment(equipmentId).Where(r => r.CustomerId == userId);
+        }
+
+        return rentals.Any() ? Ok(rentals) : NotFound();
     }
 
     [Authorize(Roles = "Admin")]
