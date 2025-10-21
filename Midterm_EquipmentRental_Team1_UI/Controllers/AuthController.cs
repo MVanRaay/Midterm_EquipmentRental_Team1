@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Midterm_EquipmentRental_Team1_UI.Models;
-using System.Text.Json;
 using Midterm_EquipmentRental_Team1_Models;
+using Midterm_EquipmentRental_Team1_UI.Models;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace Midterm_EquipmentRental_Team1_UI.Controllers
 {
@@ -12,6 +13,12 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         public AuthController(IHttpClientFactory httpClientFactory)
         {
             this.httpClientFactory = httpClientFactory;
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View("Login", new LoginViewModel());
         }
 
         [HttpPost]
@@ -42,7 +49,17 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
 
                 model.Token = result.GetProperty("token").GetString();
                 HttpContext.Session.SetString("JWToken", model.Token);
-                return RedirectToAction("Index", "Product");
+
+                var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                if (roleClaim == "Admin")
+                {
+                    return RedirectToAction("Index", "Equipment");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Equipment");
+                }
             }
             else
             {
