@@ -89,7 +89,7 @@ public class CustomerController : ControllerBase
         if (roleClaims != "Admin" && userId != id) return Unauthorized();
 
         IEnumerable<Rental> rentals = _service.GetRentalsByCustomerId(id);
-        return rentals.ToList().Count > 0 ? Ok(rentals) : NotFound();
+        return rentals.Any() ? Ok(rentals) : NotFound();
     }
 
     [Authorize]

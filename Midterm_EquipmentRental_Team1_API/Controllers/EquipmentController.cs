@@ -21,7 +21,7 @@ public class EquipmentController : ControllerBase
     public ActionResult GetAll()
     {
         IEnumerable<Equipment> equipment = _service.GetAll();
-        return equipment.ToList().Count > 0 ? Ok(equipment) : NotFound();
+        return equipment.Any() ? Ok(equipment) : NotFound();
     }
 
     [Authorize]
@@ -61,7 +61,7 @@ public class EquipmentController : ControllerBase
     public ActionResult GetAvailable()
     {
         IEnumerable<Equipment> equipment = _service.GetAvailableEquipment();
-        return equipment.ToList().Count > 0 ? Ok(equipment) : NotFound();
+        return equipment.Any() ? Ok(equipment) : NotFound();
     }
 
     [Authorize(Roles = "Admin")]
@@ -69,6 +69,6 @@ public class EquipmentController : ControllerBase
     public ActionResult GetRented()
     {
         IEnumerable<Equipment> equipment = _service.GetRentedEquipment();
-        return equipment.ToList().Count > 0 ? Ok(equipment) : NotFound();
+        return equipment.Any() ? Ok(equipment) : NotFound();
     }
 }
