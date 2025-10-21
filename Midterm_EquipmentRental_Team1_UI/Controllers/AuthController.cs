@@ -36,7 +36,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
                 Password = model.Password,
             };
 
-            var response = await client.PostAsJsonAsync("https://localhost:7212/api/auth/login", loginRequest);
+            var response = await client.PostAsJsonAsync("https://localhost:7088/api/auth/login", loginRequest);
 
             if (response.IsSuccessStatusCode)
             {
