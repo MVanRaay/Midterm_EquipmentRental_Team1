@@ -16,7 +16,6 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICrudRepository<Equipment>, EquipmentRepository>();
 builder.Services.AddScoped<ICrudRepository<Customer>, CustomerRepository>();
 builder.Services.AddScoped<ICrudRepository<Rental>, RentalRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IRentalService, RentalService>();
