@@ -1,0 +1,23 @@
+﻿@model List<Midterm_EquipmentRental_Team1_Models.Equipment>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Condition</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td>@e.Name</td>
+                <td>@e.Category.ToString()</td>
+                <td>@e.Condition.ToString()</td>
+                <td>@(e.IsAvailable ? "" : "Not ")Available</td>
+            </tr>
+        }
+    </tbody>
+</table>
