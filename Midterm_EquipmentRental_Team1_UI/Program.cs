@@ -4,14 +4,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient();
 
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = false;
+    options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -50,17 +51,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSession();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Auth}/{action=Login}");
-app.MapControllers();
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
 
 app.Run();

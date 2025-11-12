@@ -18,7 +18,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
             _http = http;
         }
 
-        [HttpGet("login")]
+        [HttpGet]
         public IActionResult Login()
         {
             ViewData.Add("Title", "Login");
@@ -26,7 +26,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
             return View("Login", model);
         }
 
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var client = _http.CreateClient();
@@ -62,12 +62,12 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
                 await HttpContext.SignInAsync("Cookies", principal, new AuthenticationProperties
                 {
                     ExpiresUtc = expTime,
-                    IsPersistent = true,
+                    IsPersistent = false,
                     AllowRefresh = true,
                 });
                 HttpContext.Session.SetString("JWToken", model.Token!);
 
-                var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.ToString();
+                var role = User.FindFirstValue(ClaimTypes.Role)!;
 
                 if (role == "Admin")
                 {
@@ -86,7 +86,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
             }
         }
 
-        [HttpGet("logout")]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             HttpContext.Session.Remove("JWToken");
@@ -94,7 +94,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
             return RedirectToAction("Login");
         }
 
-        [HttpGet("access-denied")]
+        [HttpGet]
         public IActionResult AccessDenied()
         {
             var model = new ErrorViewModel { RequestId = "Access Denied" };

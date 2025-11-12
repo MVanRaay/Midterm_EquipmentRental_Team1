@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Midterm_EquipmentRental_Team1_Models;
 using Midterm_EquipmentRental_Team1_UI.Global;
 using Midterm_EquipmentRental_Team1_UI.Models;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace Midterm_EquipmentRental_Team1_UI.Controllers
 {
-    [Route("[controller]s")]
     public class RentalController : Controller
     {
         private readonly IHttpClientFactory _http;

@@ -9,7 +9,6 @@ using System.Security.Claims;
 
 namespace Midterm_EquipmentRental_Team1_UI.Controllers
 {
-    [Route("[controller]s")]
     public class CustomerController : Controller
     {
         private readonly IHttpClientFactory _http;
@@ -20,7 +19,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("user-dashboard")]
+        [HttpGet]
         public async Task<IActionResult> UserDashboard()
         {
             var client = _http.CreateClient();
@@ -57,7 +56,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("admin-dashboard")]
+        [HttpGet]
         public async Task<IActionResult> AdminDashboard()
         {
             var client = _http.CreateClient();
