@@ -77,7 +77,7 @@ public class RentalController : ControllerBase
         if (roleClaims != "Admin" && userId != rental.CustomerId) return Unauthorized();
 
         bool success = _service.Issue(rental);
-        return success ? Ok(rental) : NotFound();
+        return success ? Get(rental.Id) : NotFound();
     }
 
     [Authorize]
@@ -94,7 +94,7 @@ public class RentalController : ControllerBase
         if (roleClaims != "Admin" && userId != rental.CustomerId) return Unauthorized();
 
         bool success = _service.Return(rental);
-        return success ? Ok(rental) : NotFound();
+        return success ? Get(rental.Id) : NotFound();
     }
 
     [Authorize]

@@ -10,10 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midterm_EquipmentRental_Tea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midterm_EquipmentRental_Team1_Models", "Midterm_EquipmentRental_Team1_Models\Midterm_EquipmentRental_Team1_Models.csproj", "{DCC324C5-2835-4906-8A8E-25869C931170}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midterm_EquipmentRental_Team1_UI", "Midterm_EquipmentRental_Team1_UI_Test\Midterm_EquipmentRental_Team1_UI.csproj", "{0B436624-8CF7-4257-94AE-D5C39911B2C3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DCC324C5-2835-4906-8A8E-25869C931170} = {DCC324C5-2835-4906-8A8E-25869C931170}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midterm_EquipmentRental_Team1_UI", "Midterm_EquipmentRental_Team1_UI\Midterm_EquipmentRental_Team1_UI.csproj", "{1B2BB7ED-12A6-F554-139D-E7917ACE8926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +26,10 @@ Global
 		{DCC324C5-2835-4906-8A8E-25869C931170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCC324C5-2835-4906-8A8E-25869C931170}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCC324C5-2835-4906-8A8E-25869C931170}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B436624-8CF7-4257-94AE-D5C39911B2C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B436624-8CF7-4257-94AE-D5C39911B2C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B436624-8CF7-4257-94AE-D5C39911B2C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B436624-8CF7-4257-94AE-D5C39911B2C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B2BB7ED-12A6-F554-139D-E7917ACE8926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B2BB7ED-12A6-F554-139D-E7917ACE8926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B2BB7ED-12A6-F554-139D-E7917ACE8926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B2BB7ED-12A6-F554-139D-E7917ACE8926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

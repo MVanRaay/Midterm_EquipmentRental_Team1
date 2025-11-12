@@ -1,0 +1,38 @@
+﻿@model RentalViewModel
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Dashboard</h3>
+</div>
+
+@if (@Model.Rental != null && @Model.Rental.Status)
+{
+    <div class="card shadow-sm mb-3 border-0 @(@Model.Rental.IsOverdue ? "border-danger" : "")">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">@Model.Rental.Equipment?.Name</h5>
+            <span class="badge bg-success">Active</span>
+        </div>
+        <div class="card-body">
+            <p class="mb-1"><strong>Customer:</strong> @Model.Rental.Customer?.Name</p>
+            <p class="mb-1"><strong>Issued:</strong> @Model.Rental.IssuedAt.ToString("MMM dd, yyyy")</p>
+            <p class="mb-1"><strong>Due:</strong> @Model.Rental.DueDate.ToString("MMM dd, yyyy")</p>
+
+            @if (@Model.Rental.IsOverdue)
+            {
+                <div class="alert alert-danger mt-3 mb-2 py-2">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    <strong>Overdue!</strong> This rental was due on @Model.Rental.DueDate.ToString("MMM dd, yyyy").
+                </div>
+            }
+            <a class="btn btn-danger w-100" asp-action="ReturnEquipment" asp-controller="Rental" asp-route-id="@Model.Rental.Id">
+                <i class="bi bi-arrow-return-left me-1"></i> Return Equipment
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center shadow-sm">
+        <i class="bi bi-info-circle me-1"></i>
+        You do not have an active rental at this time.
+    </div>
+}
