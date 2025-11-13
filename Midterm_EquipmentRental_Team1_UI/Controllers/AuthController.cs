@@ -62,12 +62,12 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
                 await HttpContext.SignInAsync("Cookies", principal, new AuthenticationProperties
                 {
                     ExpiresUtc = expTime,
-                    IsPersistent = false,
+                    IsPersistent = true,
                     AllowRefresh = true,
                 });
                 HttpContext.Session.SetString("JWToken", model.Token!);
 
-                var role = User.FindFirstValue(ClaimTypes.Role)!;
+                var role = cookieToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
 
                 if (role == "Admin")
                 {
