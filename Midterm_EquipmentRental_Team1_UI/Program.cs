@@ -18,23 +18,43 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "Cookies";
     options.DefaultSignInScheme = "Cookies";
-    options.DefaultChallengeScheme = "Cookies";
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
 })
 .AddCookie("Cookies", options =>
 {
     options.LoginPath = "/Auth/Login";
     options.AccessDeniedPath = "/Auth/AccessDenied";
 })
-.AddJwtBearer("Bearer", options =>
+.AddOpenIdConnect("oidc", options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.Authority = "https://accounts.google.com";
+    options.ClientId = "794486917877-27k138kbs06ku89n2urrv24l9poti16u.apps.googleusercontent.com";
+    options.ClientSecret = "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";
+    options.ResponseType = "code";
+    options.CallbackPath = "/signin-oidc";
+    options.Scope.Clear();
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.Scope.Add("email");
+    options.SaveTokens = true;
+
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("MidtermTeam1Section2SuperSecretKey123456")),
-        ClockSkew = TimeSpan.Zero
+        NameClaimType = "name",
+        RoleClaimType = "role"
+
+    };
+
+    options.Events = new Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectEvents
+    {
+        OnRedirectToIdentityProviderForSignOut = context =>
+        {
+            var logoutUri = "https://accounts.google.com/Logout";
+            context.HandleResponse();
+            context.Response.Redirect("/");
+            return Task.CompletedTask;
+        }
     };
 });
 builder.Services.AddAuthorization();

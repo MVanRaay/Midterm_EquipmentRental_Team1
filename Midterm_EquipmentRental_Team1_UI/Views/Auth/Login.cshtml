@@ -1,9 +1,10 @@
-﻿@model Midterm_EquipmentRental_Team1_UI.Models.LoginViewModel
-
-<form asp-action="Login" method="post">
-    <input asp-for="Username" />
-    <input asp-for="Password" type="password" />
-    <button type="submit">Login</button>
-    <br/>
-    <span style="color:red">@Model.ErrorMessage</span>
-</form>
+﻿@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <form method="post" asp-action="Logout" style="display:inline">
+        <button type="submit">Logout</button>
+    </form>
+}
+else
+{
+    <a asp-action="DoLogin">Login with Google</a>
+}
