@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,6 +8,7 @@ using Midterm_EquipmentRental_Team1_API.Repositories.Interfaces;
 using Midterm_EquipmentRental_Team1_API.Services;
 using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
 using Midterm_EquipmentRental_Team1_Models;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,49 +28,70 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = "Bearer";
-    options.DefaultChallengeScheme = "Bearer";
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
 })
-.AddJwtBearer("Bearer", options =>
+.AddCookie("Cookies")
+.AddOpenIdConnect("oidc", options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.Authority = "https://accounts.google.com";
+    options.ClientId = "794486917877-27k138kbs06ku89n2urrv24l9poti16u.apps.googleusercontent.com";
+    options.ClientSecret = "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";
+    options.ResponseType = "code";
+    options.CallbackPath = "/signin-oidc";
+    options.Scope.Clear();
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.Scope.Add("email");
+    options.SaveTokens = true;
+
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("MidtermTeam1Section2SuperSecretKey123456")),
-        ClockSkew = TimeSpan.Zero
+        NameClaimType = "name",
+        RoleClaimType = "role"
+
+    };
+
+    options.Events = new Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectEvents
+    {
+        OnRedirectToIdentityProviderForSignOut = context =>
+        {
+            var logoutUri = "https://accounts.google.com/Logout";
+            context.HandleResponse();
+            context.Response.Redirect("/");
+            return Task.CompletedTask;
+        }
     };
 });
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
+    //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    //{
+    //    In = ParameterLocation.Header,
+    //    Description = "Please enter token",
+    //    Name = "Authorization",
+    //    Type = SecuritySchemeType.Http,
+    //    BearerFormat = "JWT",
+    //    Scheme = "bearer"
+    //});
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
+    //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    //{
+    //    {
+    //        new OpenApiSecurityScheme
+    //        {
+    //            Reference = new OpenApiReference
+    //            {
+    //                Type = ReferenceType.SecurityScheme,
+    //                Id = "Bearer"
+    //            }
+    //        },
+    //        new string[] {}
+    //    }
+    //});
 });
 
 builder.Services.AddCors(options =>

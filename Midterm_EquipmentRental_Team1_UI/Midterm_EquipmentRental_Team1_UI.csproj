@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.22" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Midterm_EquipmentRental_Team1_Models\Midterm_EquipmentRental_Team1_Models.csproj" />
   </ItemGroup>
 
