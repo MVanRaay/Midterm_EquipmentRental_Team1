@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Midterm_EquipmentRental_Team1_Models;
 using Midterm_EquipmentRental_Team1_UI.Global;
 using Midterm_EquipmentRental_Team1_UI.Models;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace Midterm_EquipmentRental_Team1_UI.Controllers
 {
-    [Route("[controller]s")]
     public class RentalController : Controller
     {
         private readonly IHttpClientFactory _http;
@@ -48,7 +46,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var client = _http.CreateClient();
@@ -68,14 +66,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
                 var model = new RentalViewModel { Rental = rental };
                 ViewData["Title"] = "Rental Details";
 
-                if (role == "Admin")
-                {
-                    return View("AdminRentalDetails", model);
-                }
-                else
-                {
-                    return View("UserRentalDetails", model);
-                }
+                return View("Details", model);
             }
             else
             {
@@ -85,7 +76,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("issue")]
+        [HttpGet]
         public async Task<IActionResult> Issue()
         {
             var client = _http.CreateClient();
@@ -123,7 +114,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpPost("issue")]
+        [HttpPost]
         public async Task<IActionResult> Issue([FromBody] RentalIssueViewModel model)
         {
             var client = _http.CreateClient();
@@ -177,7 +168,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}/return")]
+        [HttpGet]
         public async Task<ActionResult> Return(int id)
         {
             var client = _http.CreateClient();
@@ -207,7 +198,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpPost("return")]
+        [HttpPost]
         public async Task<IActionResult> Return([FromBody] RentalReturnViewModel model)
         {
             if (!ModelState.IsValid)
@@ -240,7 +231,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("completed")]
+        [HttpGet]
         public async Task<IActionResult> GetCompleted()
         {
             var client = _http.CreateClient();
@@ -268,7 +259,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize("Admin")]
-        [HttpGet("overdue")]
+        [HttpGet]
         public async Task<IActionResult> GetOverdue()
         {
             var client = _http.CreateClient();
@@ -296,7 +287,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("equipment/{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetEquipmentHistory(int id)
         {
             var client = _http.CreateClient();
@@ -324,7 +315,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("{id}/edit")]
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var client = _http.CreateClient();
@@ -352,7 +343,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}/edit")]
+        [HttpPut]
         public async Task<IActionResult> Edit(int id, [FromBody] RentalViewModel model)
         {
             if (!ModelState.IsValid)
@@ -383,7 +374,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> ForceReturn(int id)
         {
             var client = _http.CreateClient();

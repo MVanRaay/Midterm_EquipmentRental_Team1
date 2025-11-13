@@ -9,7 +9,6 @@ using System.Security.Claims;
 
 namespace Midterm_EquipmentRental_Team1_UI.Controllers
 {
-    [Route("[controller]s")]
     public class CustomerController : Controller
     {
         private readonly IHttpClientFactory _http;
@@ -20,7 +19,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("user-dashboard")]
+        [HttpGet]
         public async Task<IActionResult> UserDashboard()
         {
             var client = _http.CreateClient();
@@ -57,7 +56,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("admin-dashboard")]
+        [HttpGet]
         public async Task<IActionResult> AdminDashboard()
         {
             var client = _http.CreateClient();
@@ -93,7 +92,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}/rentals")]
+        [HttpGet]
         public async Task<IActionResult> MyRentals(int id)
         {
             var client = _http.CreateClient();
@@ -160,7 +159,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var client = _http.CreateClient();
@@ -188,7 +187,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("add")]
+        [HttpGet]
         public IActionResult Add()
         {
             ViewData["Title"] = "Add Equipment";
@@ -197,7 +196,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add([FromBody] CustomerViewModel model)
         {
             if (!ModelState.IsValid)
@@ -228,7 +227,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}/edit")]
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var client = _http.CreateClient();
@@ -266,7 +265,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize]
-        [HttpPut("{id}/edit")]
+        [HttpPut]
         public async Task<IActionResult> Edit(int id, [FromBody] CustomerViewModel model)
         {
             if (!ModelState.IsValid)
@@ -298,7 +297,7 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             var client = _http.CreateClient();

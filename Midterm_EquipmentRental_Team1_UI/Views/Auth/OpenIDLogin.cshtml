@@ -1,0 +1,13 @@
+﻿@model LoginViewModel
+
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <form method="post" asp-action="Logout" style="display:inline">
+        <button type="submit">Logout</button>
+    </form>
+}
+else
+{
+    <a asp-action="Login">Login with Google</a>
+}
