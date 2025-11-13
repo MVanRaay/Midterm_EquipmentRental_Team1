@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Rental> Rentals { get; set; }
+    public DbSet<AppUser> AppUsers { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -191,6 +192,16 @@ public class AppDbContext : DbContext
                 Status = true,
                 IssuedAt = DateTime.Parse("2025/10/14 10:35:18"),
                 DueDate = DateTime.Parse("2025/10/17 23:59:59"),
+            }
+        );
+
+        modelBuilder.Entity<AppUser>().HasData(
+            new AppUser
+            {
+                Id = 1,
+                Email = "ronding36@gmail.com",
+                Role = "Admin",
+                ExternalProvider = "Google"
             }
         );
     }
