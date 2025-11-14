@@ -18,6 +18,20 @@ namespace Midterm_EquipmentRental_Team1_UI.Controllers
             _http = http;
         }
 
+        [Authorize]
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminDashboard");
+            }
+            else
+            {
+                return RedirectToAction("UserDashboard");
+            }
+        }
+
         [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> UserDashboard()

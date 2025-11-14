@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Midterm_EquipmentRental_Team1_API.Services.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Midterm_EquipmentRental_Team1_API.Data;
 using Midterm_EquipmentRental_Team1_Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+
 
 namespace Midterm_EquipmentRental_Team1_API.Controllers
 {
@@ -14,80 +10,35 @@ namespace Midterm_EquipmentRental_Team1_API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly ICustomerService _customerRepository;
+        private readonly AppDbContext _context;
 
-        public AuthController(ICustomerService customerRepository)
+        public AuthController(AppDbContext context)
         {
-            _customerRepository = customerRepository;
+            _context = context;
         }
 
-        [HttpGet("login")]
-        public IActionResult Login(string returnUrl = "/")
+        [HttpPost("sync")]
+        public async Task<IActionResult> SyncUser([FromBody] AppUser incoming)
         {
-            return Challenge(new AuthenticationProperties 
-            { 
-                RedirectUri = returnUrl 
-            }, "oidc");
-        }
+            if (incoming.Email == null) return BadRequest("Email is required");
 
-        [HttpGet("logout")]
-        [Authorize]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync("Cookies");
-            await HttpContext.SignOutAsync("oidc");
-            return Ok();
-        }
+            var existing = await _context.AppUsers.FirstOrDefaultAsync(u => u.Email == incoming.Email);
 
-        [HttpGet("user-info")]
-        [Authorize]
-        public IActionResult GetUserInfo()
-        {
-            // Extract email and sub claims
-            var email = User.FindFirst("email")?.Value;
-            var sub = User.FindFirst("sub")?.Value;
-            var name = User.FindFirst("name")?.Value;
-
-            return Ok(new
+            if (existing == null)
             {
-                Email = email,
-                Sub = sub,
-                Name = name,
-                Claims = User.Claims.Select(c => new { c.Type, c.Value })
-            });
+                existing = new AppUser
+                {
+                    Email = incoming.Email,
+                    ExternalProvider = incoming.ExternalProvider,
+                    ExternalId = incoming.ExternalId,
+                    Role = "User"
+                };
+
+                _context.AppUsers.Add(existing);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(existing);
         }
-
-        //[HttpPost("login")]
-        //public ActionResult<string> Login([FromBody] LoginRequest request)
-        //{
-        //    var customer = _customerRepository.GetAll().FirstOrDefault(u => u.Username == request.Username && u.Password == request.Password);
-        //    if (customer == null)
-        //    {
-        //        return Unauthorized("Invalid username or password");
-        //    }
-
-            //    var token = GenerateJwtToken(customer);
-
-            //    return Ok(new { Token = token });
-            //}
-
-            //private object GenerateJwtToken(Customer customer)
-            //{
-            //    var claims = new[]
-            //    {
-            //        new Claim(ClaimTypes.Name, customer.Id.ToString()),
-            //        new Claim(ClaimTypes.Role, customer.Role)
-            //    };
-
-            //    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("MidtermTeam1Section2SuperSecretKey123456"));
-            //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            //    var token = new JwtSecurityToken(
-            //        claims: claims,
-            //        expires: DateTime.Now.AddMinutes(30),
-            //        signingCredentials: creds);
-
-            //    return new JwtSecurityTokenHandler().WriteToken(token);
-            //}
     }
 }

@@ -202,6 +202,13 @@ public class AppDbContext : DbContext
                 Email = "ronding36@gmail.com",
                 Role = "Admin",
                 ExternalProvider = "Google"
+            },
+            new AppUser
+            {
+                Id = 2,
+                Email = "a3.equipmentrental.team1@gmail.com",
+                Role = "Admin",
+                ExternalProvider = "Google"
             }
         );
     }
